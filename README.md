@@ -31,7 +31,7 @@ You can include better-glass-pane from this GitHub repository by adding this dep
 <dependency>
   <groupId>lc.kra.swing</groupId>
   <artifactId>better-glass-pane</artifactId>
-  <version>0.1.2</version>
+  <version>0.1.3</version>
 </dependency>
 ```
 

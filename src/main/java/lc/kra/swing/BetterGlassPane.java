@@ -23,7 +23,10 @@
 package lc.kra.swing;
 
 import java.awt.AWTEvent;
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.Cursor;
+import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.AWTEventListener;
 import java.awt.event.MouseEvent;
@@ -69,8 +72,6 @@ public class BetterGlassPane extends JPanel implements AWTEventListener {
 	public void eventDispatched(AWTEvent event) {
 		if(rootPane!=null&&event instanceof MouseEvent) {
 			MouseEvent mouseEvent = (MouseEvent)event;
-			if(!SwingUtilities.isDescendingFrom(mouseEvent.getComponent(),rootPane))
-				return;
 			/* change source of event to glass pane, DON'T use setSource on AWTEvent's! */
 			MouseEvent newMouseEvent = !(mouseEvent instanceof MouseWheelEvent)?
 				new MouseEvent(this,mouseEvent.getID(),mouseEvent.getWhen(),mouseEvent.getModifiers(),mouseEvent.getX(),mouseEvent.getY(),mouseEvent.getClickCount(),mouseEvent.isPopupTrigger(),mouseEvent.getButton()):
@@ -124,8 +125,12 @@ public class BetterGlassPane extends JPanel implements AWTEventListener {
 	 * for the underneath components
 	 */
 	public boolean contains(int x, int y) {
-		if(getCursor()==Cursor.getDefaultCursor())
-			return false;
-		return super.contains(x,y);
+		Container container = rootPane.getContentPane();
+		Point containerPoint = SwingUtilities.convertPoint(this, x, y, container);
+		if (containerPoint.y>0) {
+			Component component = SwingUtilities.getDeepestComponentAt(
+				container, containerPoint.x, containerPoint.y);
+			return component==null||component.getCursor()==Cursor.getDefaultCursor();
+		} else return true;
 	}
 }

@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>lc.kra.swing</groupId>
 	<artifactId>better-glass-pane</artifactId>
-	<version>0.1.2</version>
+	<version>0.1.3</version>
 	<description>A BetterGlassPane for JRootPane objects, handling mouse events and cursors.</description>
 	<url>https://github.com/kristian/better-glass-pane</url>
 
