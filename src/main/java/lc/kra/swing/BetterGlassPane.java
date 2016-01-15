@@ -31,6 +31,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
 import javax.swing.SwingUtilities;
@@ -39,17 +40,19 @@ import javax.swing.event.EventListenerList;
 public class BetterGlassPane extends JPanel implements AWTEventListener {
 	private static final long serialVersionUID = 1l;
 
-	private JRootPane pane;
+	private JRootPane rootPane;
 	private EventListenerList listeners = new EventListenerList();
 	
 	public BetterGlassPane() {
-		super(); setOpaque(false); setVisible(true);
 		Toolkit.getDefaultToolkit().addAWTEventListener(this,
 			AWTEvent.MOUSE_WHEEL_EVENT_MASK|AWTEvent.MOUSE_MOTION_EVENT_MASK|AWTEvent.MOUSE_EVENT_MASK);
 	}
-	public BetterGlassPane(JRootPane pane) { this(); (this.pane=pane).setGlassPane(this); }
+	public BetterGlassPane(JRootPane rootPane) {
+		this(); (this.rootPane=rootPane).setGlassPane(this);
+		setOpaque(false); setVisible(true);
+	}
 	
-	public void setRootPane(JRootPane pane) { this.pane = pane; }
+	public void setRootPane(JRootPane pane) { this.rootPane = pane; }
 	
 	@Override public synchronized MouseListener[] getMouseListeners() { return listeners.getListeners(MouseListener.class); }
 	@Override public synchronized void addMouseListener(MouseListener listener) { listeners.add(MouseListener.class,listener); }
@@ -64,9 +67,9 @@ public class BetterGlassPane extends JPanel implements AWTEventListener {
 	@Override public synchronized void removeMouseWheelListener(MouseWheelListener listener) { listeners.remove(MouseWheelListener.class,listener); }
 	
 	public void eventDispatched(AWTEvent event) {
-		if(pane!=null&&event instanceof MouseEvent) {
+		if(rootPane!=null&&event instanceof MouseEvent) {
 			MouseEvent mouseEvent = (MouseEvent)event;
-			if(!SwingUtilities.isDescendingFrom(mouseEvent.getComponent(),pane))
+			if(!SwingUtilities.isDescendingFrom(mouseEvent.getComponent(),rootPane))
 				return;
 			/* change source of event to glass pane, DON'T use setSource on AWTEvent's! */
 			MouseEvent newMouseEvent = !(mouseEvent instanceof MouseWheelEvent)?
