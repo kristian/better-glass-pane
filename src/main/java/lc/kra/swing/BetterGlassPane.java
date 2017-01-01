@@ -22,6 +22,10 @@
 
 package lc.kra.swing;
 
+import static javax.swing.SwingUtilities.convertMouseEvent;
+import static javax.swing.SwingUtilities.convertPoint;
+import static javax.swing.SwingUtilities.getDeepestComponentAt;
+
 import java.awt.AWTEvent;
 import java.awt.Component;
 import java.awt.Container;
@@ -80,10 +84,8 @@ public class BetterGlassPane extends JPanel implements AWTEventListener {
 					return; //it's not our root pane (e.g. different window)
 				
 				/* change source and coordinate system of event to glass pane, DON'T use setSource on AWTEvent's! */
-				newMouseEvent = SwingUtilities.convertMouseEvent(sourceComponent, mouseEvent, rootPane);
-			} else newMouseEvent = !(mouseEvent instanceof MouseWheelEvent)?
-				new MouseEvent(this, mouseEvent.getID(), mouseEvent.getWhen(), mouseEvent.getModifiers(), mouseEvent.getX(), mouseEvent.getY(), mouseEvent.getClickCount(), mouseEvent.isPopupTrigger(), mouseEvent.getButton()):
-				new MouseWheelEvent(this, mouseEvent.getID(), mouseEvent.getWhen(), mouseEvent.getModifiers(), mouseEvent.getX(), mouseEvent.getY(), mouseEvent.getXOnScreen(), mouseEvent.getYOnScreen(), mouseEvent.getClickCount(), mouseEvent.isPopupTrigger(), ((MouseWheelEvent)mouseEvent).getScrollType(), ((MouseWheelEvent)mouseEvent).getScrollAmount(), ((MouseWheelEvent)mouseEvent).getWheelRotation(), ((MouseWheelEvent)mouseEvent).getPreciseWheelRotation());
+				newMouseEvent = convertMouseEvent(sourceComponent, mouseEvent, this);
+			} else newMouseEvent = convertMouseEvent(null, mouseEvent, this);
 			
 			switch(event.getID()) {
 			case MouseEvent.MOUSE_CLICKED:
@@ -136,9 +138,9 @@ public class BetterGlassPane extends JPanel implements AWTEventListener {
 	 */
 	public boolean contains(int x, int y) {
 		Container container = rootPane.getContentPane();
-		Point containerPoint = SwingUtilities.convertPoint(this, x, y, container);
+		Point containerPoint = convertPoint(this, x, y, container);
 		if(containerPoint.y>0) {
-			Component component = SwingUtilities.getDeepestComponentAt(
+			Component component = getDeepestComponentAt(
 				container, containerPoint.x, containerPoint.y);
 			return component==null||component.getCursor()==Cursor.getDefaultCursor();
 		} else return true;
