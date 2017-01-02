@@ -22,6 +22,17 @@
 
 package lc.kra.swing;
 
+import static java.awt.AWTEvent.MOUSE_EVENT_MASK;
+import static java.awt.AWTEvent.MOUSE_MOTION_EVENT_MASK;
+import static java.awt.AWTEvent.MOUSE_WHEEL_EVENT_MASK;
+import static java.awt.event.MouseEvent.MOUSE_CLICKED;
+import static java.awt.event.MouseEvent.MOUSE_DRAGGED;
+import static java.awt.event.MouseEvent.MOUSE_ENTERED;
+import static java.awt.event.MouseEvent.MOUSE_EXITED;
+import static java.awt.event.MouseEvent.MOUSE_MOVED;
+import static java.awt.event.MouseEvent.MOUSE_PRESSED;
+import static java.awt.event.MouseEvent.MOUSE_RELEASED;
+import static java.awt.event.MouseEvent.MOUSE_WHEEL;
 import static javax.swing.SwingUtilities.convertMouseEvent;
 import static javax.swing.SwingUtilities.convertPoint;
 import static javax.swing.SwingUtilities.getDeepestComponentAt;
@@ -52,7 +63,7 @@ public class BetterGlassPane extends JPanel implements AWTEventListener {
 	
 	public BetterGlassPane() {
 		Toolkit.getDefaultToolkit().addAWTEventListener(this,
-			AWTEvent.MOUSE_WHEEL_EVENT_MASK|AWTEvent.MOUSE_MOTION_EVENT_MASK|AWTEvent.MOUSE_EVENT_MASK);
+			MOUSE_WHEEL_EVENT_MASK|MOUSE_MOTION_EVENT_MASK|MOUSE_EVENT_MASK);
 	}
 	public BetterGlassPane(JRootPane rootPane) {
 		this(); (this.rootPane=rootPane).setGlassPane(this);
@@ -88,35 +99,35 @@ public class BetterGlassPane extends JPanel implements AWTEventListener {
 			} else newMouseEvent = convertMouseEvent(null, mouseEvent, this);
 			
 			switch(event.getID()) {
-			case MouseEvent.MOUSE_CLICKED:
+			case MOUSE_CLICKED:
 				for(MouseListener listener:listeners.getListeners(MouseListener.class))
 					listener.mouseClicked(newMouseEvent);
 				break;
-			case MouseEvent.MOUSE_ENTERED:
-				for(MouseListener listener:listeners.getListeners(MouseListener.class))
-					listener.mouseEntered(newMouseEvent);
-				break;
-			case MouseEvent.MOUSE_EXITED:
-				for(MouseListener listener:listeners.getListeners(MouseListener.class))
-					listener.mouseExited(newMouseEvent);
-				break;
-			case MouseEvent.MOUSE_PRESSED:
+			case MOUSE_PRESSED:
 				for(MouseListener listener:listeners.getListeners(MouseListener.class))
 					listener.mousePressed(newMouseEvent);
 				break;
-			case MouseEvent.MOUSE_RELEASED:
+			case MOUSE_RELEASED:
 				for(MouseListener listener:listeners.getListeners(MouseListener.class))
 					listener.mouseReleased(newMouseEvent);
 				break;
-			case MouseEvent.MOUSE_MOVED:
+			case MOUSE_MOVED:
 				for(MouseMotionListener listener:listeners.getListeners(MouseMotionListener.class))
 					listener.mouseMoved(newMouseEvent);
 				break;
-			case MouseEvent.MOUSE_DRAGGED:
+			case MOUSE_ENTERED:
+				for(MouseListener listener:listeners.getListeners(MouseListener.class))
+					listener.mouseEntered(newMouseEvent);
+				break;
+			case MOUSE_EXITED:
+				for(MouseListener listener:listeners.getListeners(MouseListener.class))
+					listener.mouseExited(newMouseEvent);
+				break;
+			case MOUSE_DRAGGED:
 				for(MouseMotionListener listener:listeners.getListeners(MouseMotionListener.class))
 					listener.mouseDragged(newMouseEvent);
 				break;
-			case MouseEvent.MOUSE_WHEEL:
+			case MOUSE_WHEEL:
 				for(MouseWheelListener listener:listeners.getListeners(MouseWheelListener.class))
 					listener.mouseWheelMoved((MouseWheelEvent)newMouseEvent);
 				break;
